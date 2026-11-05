@@ -46,8 +46,13 @@ jobs:
             exit 1
           fi
       # No caches in this workflow: a cache that another workflow saved could
-      # change what goes into the release.
-      - uses: dtolnay/rust-toolchain@stable
+      # change what goes into the release. Rust comes from rustup, which
+      # GitHub's runner has already, so no third-party action runs here.
+      - name: Install Rust
+        run: |
+          rustup toolchain install stable --profile minimal --no-self-update
+          rustup default stable
+          rustc --version
       - name: Install the Tauri CLI
         run: cargo install --locked tauri-cli --version 2.12.4
       - name: Build
