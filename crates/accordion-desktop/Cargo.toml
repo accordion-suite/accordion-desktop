@@ -1,0 +1,39 @@
+[package]
+name = "accordion-desktop"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+repository.workspace = true
+publish.workspace = true
+
+# The Accordion desktop app (decision 23): it lives in the system tray,
+# keeps each account's Drive in sync with the engine in `accordion-sync`,
+# and on Windows puts each account in File Explorer with Cloud Files.
+
+[[bin]]
+name = "accordion-desktop"
+path = "src/main.rs"
+
+[build-dependencies]
+tauri-build = { version = "2.7.4", features = [] }
+
+[dependencies]
+accordion-sync = { git = "https://github.com/accordion-suite/accordion-core", version = "0.1.0" }
+# The same versions as `accordion-sync`'s, so the app builds one copy.
+http-body-util = "0.1.5"
+jiff = { version = "0.2.38", default-features = false, features = ["std"] }
+serde = { version = "1.0.229", features = ["derive"] }
+serde_json = "1.0.154"
+tauri = { version = "2.12.5", features = ["tray-icon", "image-png"] }
+tauri-plugin-single-instance = "2.5.5"
+tokio = { version = "1.53.3", features = ["macros", "rt-multi-thread", "sync", "time"] }
+
+[target.'cfg(windows)'.dependencies]
+cloud-files = { path = "../cloud-files", version = "0.1.0" }
+windows = { version = "0.62.2", features = [
+    "Win32_Foundation",
+    "Win32_Security_Credentials",
+    "Win32_System_Registry",
+    "Win32_UI_Shell",
+    "Win32_UI_WindowsAndMessaging",
+] }

@@ -3,20 +3,32 @@
 
 [graph]
 all-features = true
-# The server runs only on Linux. Checking only these targets skips crates used
-# on other platforms, such as the bundled root certificates (webpki-root-certs,
-# CDLA-Permissive-2.0) that rustls-platform-verifier uses on Windows, macOS,
-# and mobile.
+# The desktop app runs on Windows, macOS, and Linux.
 targets = [
+    "x86_64-pc-windows-msvc",
+    "aarch64-pc-windows-msvc",
+    "x86_64-apple-darwin",
+    "aarch64-apple-darwin",
     "x86_64-unknown-linux-gnu",
     "aarch64-unknown-linux-gnu",
-    "x86_64-unknown-linux-musl",
-    "aarch64-unknown-linux-musl",
 ]
 
 [advisories]
 # To accept a specific advisory, add its ID here with a comment explaining why.
-ignore = []
+ignore = [
+    # proc-macro-error is unmaintained. It's a build-time macro helper that
+    # GTK's glib-macros 0.18 uses, which Tauri's tray icon brings on Linux
+    # only. It runs no code in the app. Drop this when Tauri moves to a newer
+    # GTK binding.
+    "RUSTSEC-2024-0370",
+    # zbus_names, zvariant, and zvariant_derive were merged into zbus 6.
+    # zbus 5 still uses them, for the single-instance plugin's D-Bus calls on
+    # Linux only. Nothing is known to be wrong with them. Drop these when the
+    # plugin moves to zbus 6.
+    "RUSTSEC-2026-0370",
+    "RUSTSEC-2026-0371",
+    "RUSTSEC-2026-0372",
+]
 
 [licenses]
 # Licenses that can be combined with AGPL-3.0. Check compatibility before you

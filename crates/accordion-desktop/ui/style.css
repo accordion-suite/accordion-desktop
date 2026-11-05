@@ -1,0 +1,302 @@
+/* The desktop app's window. Its colors are the web app's tokens, so the
+   two look alike, and fonts are the computer's own. */
+
+:root {
+  color-scheme: light dark;
+  --text: #1c2430;
+  --muted: #5b6573;
+  --page: #f1f4f9;
+  --panel: #ffffff;
+  --surface: #e9eef6;
+  --border: #d5dce6;
+  --accent: #1a5fb4;
+  --accent-text: #ffffff;
+  --error: #b3261e;
+  --danger: #b3261e;
+  --focus: #1a5fb4;
+  --ok: #1d6b38;
+  --ok-soft: #dcf2e3;
+  --warning: #7a4f00;
+  --warning-soft: #fbeccb;
+  --error-soft: #fbe3e1;
+  --shadow: 0 1px 2px rgb(16 24 40 / 0.08), 0 4px 16px rgb(16 24 40 / 0.12);
+  --radius: 12px;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --text: #e4e8ee;
+    --muted: #a4adba;
+    --page: #111418;
+    --panel: #1a1e24;
+    --surface: #242a32;
+    --border: #353d48;
+    --accent: #8ab4f0;
+    --accent-text: #0b1a2e;
+    --error: #f2b8b5;
+    --danger: #8c1d18;
+    --focus: #8ab4f0;
+    --ok: #9fdcb0;
+    --ok-soft: #173523;
+    --warning: #f5cf86;
+    --warning-soft: #3d2e0b;
+    --error-soft: #4a1f1c;
+    --shadow: 0 1px 2px rgb(0 0 0 / 0.4), 0 4px 16px rgb(0 0 0 / 0.5);
+  }
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font: 15px/1.5 system-ui, sans-serif;
+  color: var(--text);
+  background: var(--page);
+}
+
+:focus-visible {
+  outline: 3px solid var(--focus);
+  outline-offset: 2px;
+}
+
+main {
+  display: grid;
+  gap: 16px;
+  max-width: 560px;
+  margin: 0 auto;
+  padding: 20px 16px 32px;
+}
+
+header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+h1 {
+  margin: 0;
+  font-size: 1.5rem;
+  font-weight: 500;
+}
+
+h2 {
+  margin: 0;
+  font-size: 1.125rem;
+  font-weight: 600;
+}
+
+p {
+  margin: 0;
+}
+
+[hidden] {
+  display: none !important;
+}
+
+.card {
+  display: grid;
+  gap: 10px;
+  padding: 18px;
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+}
+
+.hint,
+.loading,
+.who {
+  color: var(--muted);
+}
+
+.hint {
+  font-size: 0.875rem;
+}
+
+.error {
+  color: var(--error);
+}
+
+.error:empty {
+  display: none;
+}
+
+label {
+  font-weight: 600;
+  margin-top: 4px;
+}
+
+input,
+textarea {
+  width: 100%;
+  padding: 10px 12px;
+  font: inherit;
+  color: inherit;
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+}
+
+textarea {
+  resize: vertical;
+  font-family: ui-monospace, monospace;
+  font-size: 0.875rem;
+}
+
+button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px 18px;
+  font: inherit;
+  font-weight: 600;
+  color: var(--accent-text);
+  background: var(--accent);
+  border: 1px solid var(--accent);
+  border-radius: 999px;
+  cursor: pointer;
+}
+
+button:disabled {
+  opacity: 0.6;
+  cursor: default;
+}
+
+button.wide {
+  width: 100%;
+}
+
+button.secondary {
+  color: var(--accent);
+  background: transparent;
+  border-color: var(--border);
+}
+
+button.quiet {
+  color: var(--text);
+  background: transparent;
+  border-color: transparent;
+}
+
+button.secondary:hover:not(:disabled),
+button.quiet:hover:not(:disabled) {
+  background: var(--surface);
+}
+
+button.danger {
+  color: #ffffff;
+  background: var(--danger);
+  border-color: var(--danger);
+}
+
+button.link {
+  justify-self: start;
+  padding: 0;
+  color: var(--accent);
+  background: none;
+  border: none;
+  border-radius: 0;
+}
+
+button.link:hover {
+  text-decoration: underline;
+}
+
+.buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 4px;
+}
+
+#accounts {
+  display: grid;
+  gap: 16px;
+}
+
+#accounts:empty {
+  display: none;
+}
+
+.card-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.state {
+  flex: none;
+  padding: 2px 10px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  border-radius: 999px;
+}
+
+.state.ok {
+  color: var(--ok);
+  background: var(--ok-soft);
+}
+
+.state.waiting {
+  color: var(--muted);
+  background: var(--surface);
+}
+
+.state.warning {
+  color: var(--warning);
+  background: var(--warning-soft);
+}
+
+.state.bad {
+  color: var(--error);
+  background: var(--error-soft);
+}
+
+.notice {
+  display: grid;
+  gap: 8px;
+  padding: 10px 12px;
+  color: var(--warning);
+  background: var(--warning-soft);
+  border-radius: 8px;
+}
+
+ul {
+  margin: 0;
+  padding-left: 20px;
+}
+
+details ul {
+  margin-top: 6px;
+}
+
+details summary {
+  cursor: pointer;
+  color: var(--muted);
+}
+
+.recent li {
+  overflow-wrap: anywhere;
+}
+
+dialog {
+  max-width: 420px;
+  padding: 20px;
+  color: var(--text);
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+}
+
+dialog form {
+  display: grid;
+  gap: 12px;
+}
+
+dialog::backdrop {
+  background: rgb(0 0 0 / 0.4);
+}

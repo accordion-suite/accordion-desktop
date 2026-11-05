@@ -1,0 +1,29 @@
+[package]
+name = "cloud-files"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+repository.workspace = true
+publish.workspace = true
+
+# Windows' Cloud Files API (decision 23): the sync root in File Explorer,
+# placeholders, and downloading a file's contents when something opens it.
+
+[target.'cfg(windows)'.dependencies]
+windows = { version = "0.62.2", features = [
+    "Foundation",
+    "Foundation_Collections",
+    "Storage",
+    "Storage_Provider",
+    "Storage_Search",
+    "Storage_Streams",
+    "Win32_Foundation",
+    "Win32_Security",
+    "Win32_Security_Authorization",
+    "Win32_Storage_CloudFilters",
+    "Win32_Storage_FileSystem",
+    "Win32_System_CorrelationVector",
+    "Win32_System_IO",
+    "Win32_System_Registry",
+    "Win32_System_Threading",
+] }

@@ -1,1 +1,3 @@
 /target
+# Made by tauri-build.
+/crates/accordion-desktop/gen/

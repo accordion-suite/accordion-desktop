@@ -1,0 +1,93 @@
+# Builds the Windows installer and drafts a release (decision 24).
+#
+# Pushing a version tag, such as v0.1.0, builds the installer on GitHub's
+# own Windows runner and creates a draft pre-release with it and its
+# SHA256SUMS. The first alpha goes out unsigned, for testers only. Signing
+# with SignPath comes after Accordion is accepted, and the developer signs
+# SHA256SUMS with the release key, as for the server.
+#
+# Running the workflow by hand makes a trial build of main, kept as a
+# workflow artifact instead of a release.
+
+name: Release
+
+on:
+  push:
+    tags: ["v*"]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    name: Build the Windows installer
+    runs-on: windows-2025
+    steps:
+      # The build runs code from every dependency, so it gets no token it
+      # could push with.
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - name: Check the tag
+        if: github.ref_type == 'tag'
+        shell: bash
+        env:
+          TAG: ${{ github.ref_name }}
+        run: |
+          version="$(sed -n 's/^version = "\(.*\)"$/\1/p' Cargo.toml | head -n 1)"
+          if [[ "$TAG" != "v$version" ]]; then
+            echo "The tag is $TAG, but Cargo.toml says the version is $version. Tag the commit as v$version instead."
+            exit 1
+          fi
+          if ! git merge-base --is-ancestor HEAD origin/main; then
+            echo "$TAG isn't on main. Releases are built from main, so tag a commit there."
+            exit 1
+          fi
+      # No caches in this workflow: a cache that another workflow saved could
+      # change what goes into the release.
+      - uses: dtolnay/rust-toolchain@stable
+      - name: Install the Tauri CLI
+        run: cargo install --locked tauri-cli --version 2.12.4
+      - name: Build
+        working-directory: crates/accordion-desktop
+        run: cargo tauri build
+      - name: Collect the release files
+        shell: bash
+        run: |
+          mkdir release-files
+          cp target/release/bundle/nsis/*-setup.exe release-files/
+          (cd release-files && sha256sum -- * > SHA256SUMS && cat SHA256SUMS)
+      - uses: actions/upload-artifact@v7
+        with:
+          name: release-files
+          path: release-files
+          if-no-files-found: error
+          retention-days: 30
+
+  draft:
+    name: Draft the release
+    needs: build
+    if: github.ref_type == 'tag'
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/download-artifact@v8
+        with:
+          name: release-files
+          path: release-files
+      - name: Create the draft release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG: ${{ github.ref_name }}
+        run: |
+          (cd release-files && sha256sum --check SHA256SUMS)
+          {
+            echo "An early test version of the Accordion app for Windows 10 and 11. It keeps your Drive files in File Explorer, and downloads each one when you open it."
+            echo
+            echo "This version isn't signed yet, so Windows warns you before it runs. To install it, open the installer, select **More info**, then **Run anyway**."
+          } > notes.md
+          gh release create "$TAG" --repo "$GITHUB_REPOSITORY" --draft --prerelease --verify-tag \
+            --title "Accordion for Windows ${TAG#v}" --notes-file notes.md release-files/*

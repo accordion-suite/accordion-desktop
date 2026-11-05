@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <meta name="color-scheme" content="light dark" />
+    <title>Accordion</title>
+    <link rel="stylesheet" href="style.css" />
+    <script src="app.js" defer></script>
+  </head>
+  <body>
+    <main>
+      <header>
+        <img src="icon.svg" alt="" width="36" height="36" />
+        <h1>Accordion</h1>
+      </header>
+
+      <p class="loading" id="loading">Loading…</p>
+      <section id="accounts" aria-label="Accounts"></section>
+
+      <button type="button" class="secondary wide" id="add-another" hidden>
+        Add another account
+      </button>
+
+      <form id="add" class="card" hidden novalidate>
+        <h2 id="add-title">Add your Accordion server</h2>
+        <p class="hint">
+          Your Drive files appear in File Explorer, and download when you open them.
+        </p>
+        <label for="server">Server address</label>
+        <input id="server" name="server" autocomplete="url" spellcheck="false" placeholder="ourhome.dedyn.io" />
+        <label for="name">Name</label>
+        <input id="name" name="name" spellcheck="false" placeholder="Home" />
+        <p class="hint" id="name-hint">File Explorer shows it as Accordion (Home).</p>
+        <div id="by-code" hidden>
+          <label for="code">Code or setup</label>
+          <textarea id="code" name="code" rows="3" spellcheck="false"></textarea>
+          <p class="hint">
+            In Accordion, go to <strong>Settings</strong> &gt; <strong>Apps and devices</strong>, and
+            select <strong>Add the Accordion app</strong>. Away from home, copy the whole setup under the
+            QR code. It already says which server it's for, so you can leave the address empty.
+          </p>
+        </div>
+        <p class="error" id="add-error" role="alert"></p>
+        <div class="buttons">
+          <button type="submit" id="add-submit">Sign in with your browser</button>
+          <button type="button" class="secondary" id="add-cancel" hidden>Cancel</button>
+        </div>
+        <button type="button" class="link" id="toggle-code">Use a code instead</button>
+      </form>
+
+      <div id="waiting" class="card" hidden role="status">
+        <h2>Finish signing in</h2>
+        <p>
+          Your browser opened Accordion's sign-in page. Sign in there, then select <strong>Allow</strong>.
+          This window updates when you're done.
+        </p>
+        <button type="button" class="secondary" id="stop-waiting">Cancel</button>
+      </div>
+    </main>
+
+    <dialog id="remove-dialog" aria-labelledby="remove-title">
+      <form method="dialog">
+        <h2 id="remove-title">Remove this account?</h2>
+        <p id="remove-body"></p>
+        <div class="buttons">
+          <button value="remove" class="danger">Remove</button>
+          <button value="cancel" class="secondary" autofocus>Cancel</button>
+        </div>
+      </form>
+    </dialog>
+  </body>
+</html>
