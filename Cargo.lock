@@ -22,7 +22,7 @@ dependencies = [
 [[package]]
 name = "accordion-sync"
 version = "0.1.0"
-source = "git+https://github.com/accordion-suite/accordion-core#d199a849f55a01668f8564ec266f1f75a71808cd"
+source = "git+https://github.com/accordion-suite/accordion-core#71327cdb2e732a99eba82e67a7aef47cd199cf98"
 dependencies = [
  "base64 0.23.1",
  "bytes",
