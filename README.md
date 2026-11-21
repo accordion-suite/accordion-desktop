@@ -8,11 +8,11 @@ This repo is part of [Accordion](https://github.com/accordion-suite/accordion), 
 
 ## What it does on Windows
 
-- **Each account is in File Explorer's navigation pane,** named like **Accordion (Home)**, with **My Drive** and **Shared with me** inside.
-- **Files download when you open them.** Until then, each one is a placeholder with its name, size, and date. **Always keep on this device** and **Free up space** in File Explorer's menu work as they do for OneDrive.
+- **Each account is in File Explorer's navigation pane,** named like **Accordion (Home)**, with **My Drive** and **Shared with me** inside, and a folder beside them for each app, such as **Notes** and **Docs** ([decision 32](https://github.com/accordion-suite/accordion/blob/main/docs/decisions/0032-a-place-for-each-apps-files.md)).
+- **Files download when you open them -** Until then, each one is a placeholder with its name, size, and date. **Always keep on this device** and **Free up space** in File Explorer's menu work as they do for OneDrive.
 - **The app lives in the system tray,** and starts when you sign in to Windows. Closing its window leaves it syncing. **Quit Accordion** in the tray menu stops it.
 - **Adding an account** signs in through your browser, or with a code from Accordion's **Settings** > **Apps and devices**. Away from home, the whole setup under the QR code works too. Each account reaches its server through its own tunnel when you're away.
-- **Session tokens and tunnel keys are in Windows' Credential Manager.** The list of accounts is in `%APPDATA%\Accordion`, and what each folder last agreed with its server is in `%LOCALAPPDATA%\Accordion\state`.
+- **Session tokens and tunnel keys are in Windows' Credential Manager -** The list of accounts is in `%APPDATA%\Accordion`, and what each folder last agreed with its server is in `%LOCALAPPDATA%\Accordion\state`.
 - **Removing an account** signs this computer out of it. Files you kept on the computer stay, and placeholders whose contents were never downloaded go.
 
 ## Crates
