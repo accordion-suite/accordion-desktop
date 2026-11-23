@@ -31,7 +31,9 @@ fn identity(item: &RemoteItem) -> Vec<u8> {
 fn modified(item: &RemoteItem) -> SystemTime {
     item.modified_at
         .parse::<jiff::Timestamp>()
-        .map_or_else(|_| SystemTime::now(), SystemTime::from)
+        .ok()
+        .and_then(|time| SystemTime::try_from(time).ok())
+        .unwrap_or_else(SystemTime::now)
 }
 
 /// Puts an account in File Explorer: registers its sync root, and connects

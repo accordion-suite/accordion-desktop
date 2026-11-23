@@ -21,7 +21,7 @@ tauri-build = { version = "2.7.4", features = [] }
 accordion-sync = { git = "https://github.com/accordion-suite/accordion-core", version = "0.1.0" }
 # The same versions as `accordion-sync`'s, so the app builds one copy.
 http-body-util = "0.1.5"
-jiff = { version = "0.2.38", default-features = false, features = ["std"] }
+jiff = { version = "1.0.0", default-features = false, features = ["std"] }
 serde = { version = "1.0.229", features = ["derive"] }
 serde_json = "1.0.154"
 tauri = { version = "2.12.5", features = ["tray-icon", "image-png"] }
